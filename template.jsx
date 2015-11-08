@@ -6,17 +6,6 @@ Template = class {
 
         console.log("constructing "+ name + " with: ", this);
 
-        // This dependency is used to identify state transitions in
-        // _subscriptionHandles which could cause the result of
-        // subscriptionsReady to change. Basically this is triggered
-        // whenever a new subscription handle is added or when a subscription handle
-        // is removed and they are not ready.
-        this._allSubsReadyDep = new Tracker.Dependency();
-        this._allSubsReady = false;
-        this.subscriptionHandles = {};
-
-        this._trackers = [];
-
         this.init();
       }
 
@@ -24,7 +13,6 @@ Template = class {
        * Initiates helpers, computations and sets the context.
        */
       init() {
-        // Create TemplateInstance
         const self = this;
         this._comps = {};
         this.state = {};
@@ -139,6 +127,8 @@ Template = class {
       }
 
       static autorun(runFunc, onError) {
+        this._trackers = this._trackers || [];
+
         if (Tracker.active) {
           throw new Error(
             "Can't call Template#autorun from a Tracker Computation;"
@@ -151,7 +141,7 @@ Template = class {
         //  (self.name || 'anonymous') + ':' + (displayName || 'anonymous');
         // Create autorun
         let comp = Tracker.autorun(runFunc, onError);
-        this._trackers = this._trackers || [];
+
         // Track the tracker ;)
         this._trackers.push(comp);
 
@@ -169,6 +159,13 @@ Template = class {
           throw new Error("Can't subscribe inside onDestroyed callback!");
         }
         let subHandles = this._subscriptionHandles = this._subscriptionHandles || {};
+        // This dependency is used to identify state transitions in
+        // _subscriptionHandles which could cause the result of
+        // subscriptionsReady to change. Basically this is triggered
+        // whenever a new subscription handle is added or when a subscription handle
+        // is removed and they are not ready.
+        this._allSubsReadyDep = this._allSubsReadyDep || new Tracker.Dependency();
+        this._allSubsReady = this._allSubsReady || false;
         // Duplicate logic from Meteor.subscribe
         var options = {};
         if (args.length) {
@@ -239,6 +236,15 @@ Template = class {
       }
 
       static subscriptionsReady() {
+        // This dependency is used to identify state transitions in
+        // _subscriptionHandles which could cause the result of
+        // subscriptionsReady to change. Basically this is triggered
+        // whenever a new subscription handle is added or when a subscription handle
+        // is removed and they are not ready.
+        this._allSubsReadyDep = this._allSubsReadyDep || new Tracker.Dependency();
+        this._allSubsReady = this._allSubsReady || false;
+        this._subscriptionHandles = this._subscriptionHandles || {};
+
         this._allSubsReadyDep.depend();
 
         this._allSubsReady = _.all(this._subscriptionHandles, function (handle) {
