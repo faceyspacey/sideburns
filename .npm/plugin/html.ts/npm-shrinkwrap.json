@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "cheerio": {
+      "version": "0.7.0",
+      "dependencies": {
+        "cheerio-soupselect": {
+          "version": "0.1.1"
+        },
+        "htmlparser2": {
+          "version": "2.2.2"
+        },
+        "underscore": {
+          "version": "1.8.3"
+        }
+      }
+    },
+    "eval": {
+      "version": "0.1.0",
+      "dependencies": {
+        "require-like": {
+          "version": "0.1.2"
+        }
+      }
+    },
+    "typescript": {
+      "version": "1.5.3"
+    }
+  }
+}

@@ -3,9 +3,12 @@ Template = class {
     Template[name] = class extends React.Component {
       constructor(props) {
         super(props);
+<<<<<<< HEAD
 
         console.log("constructing "+ name + " with: ", this);
 
+=======
+>>>>>>> refs/remotes/timbrandin/devel
         this.init();
       }
 
@@ -20,8 +23,11 @@ Template = class {
         this.events = Template[name]._events || {};
         this.helpers = Template[name]._helpers || {};
 
+<<<<<<< HEAD
         _.extend(this.helpers, Template._globalHelpers);
 
+=======
+>>>>>>> refs/remotes/timbrandin/devel
         _.each(this.helpers, (fn, helper) => {
           // Define properties for all helpers.
           Object.defineProperty(this.data, helper, {
@@ -30,9 +36,14 @@ Template = class {
                 let state = {}, initial = true;
                 self._comps[helper] = Tracker.autorun(() => {
                   self.state[helper] = fn.apply(self, arguments);
+<<<<<<< HEAD
                   if (!initial) {
                     self.setState(state);
                   }
+=======
+                  if (!initial)
+                    self.setState(state);
+>>>>>>> refs/remotes/timbrandin/devel
                 });
                 initial = false;
               }
@@ -44,6 +55,7 @@ Template = class {
         });
       }
 
+<<<<<<< HEAD
       componentWillMount() {
         //console.log("compWillMount: ", this._callbacks);
         Template[name]._callbacks = Template[name]._callbacks || {};
@@ -84,6 +96,17 @@ Template = class {
         _.each(this.subscriptionHandles, function (handle) {
           handle.stop();
         });
+=======
+      componentDidMount() {
+        // this.init(true);
+        // console.log(this.state);
+      }
+
+      componentWillUnmount() {
+        for (let comp of this._comps) {
+          comp.stop();
+        }
+>>>>>>> refs/remotes/timbrandin/devel
       }
 
       static helpers(helpers) {
@@ -96,6 +119,7 @@ Template = class {
         _.extend(this._events, events);
       }
 
+<<<<<<< HEAD
       static onCreated(callback) {
         if (typeof callback !== "function") {
           throw new Error("onCreated callback must be a function");
@@ -258,6 +282,12 @@ Template = class {
         return ReactTemplate[name](this, this.data);
       }
     };
+=======
+      render() {
+        return ReactTemplate[name](this, this.data);
+      }
+    }
+>>>>>>> refs/remotes/timbrandin/devel
     if (type === 'body') {
       if (Package['kadira:flow-router-ssr'] && Meteor.isClient) {
         // Disable warnings of missing "/" route.
@@ -306,10 +336,13 @@ Template = class {
       return rootNode;
     }
   }
+<<<<<<< HEAD
 
   static registerHelper (name, func) {
     this._globalHelpers = this._globalHelpers || {};
 
     this._globalHelpers[name] = func;
   }
+=======
+>>>>>>> refs/remotes/timbrandin/devel
 };
